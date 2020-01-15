@@ -17,6 +17,7 @@ func GetOnlyText(body string) string {
 	ret := DelMention(body)
 	ret = DelHash(ret)
 	ret = DelURL(ret)
+	ret = AdjustBrackets(ret)
 	return ret
 }
 
@@ -39,4 +40,32 @@ func DelURL(body string) string {
 	ret := rep.ReplaceAllString(body, "")
 	ret = strings.TrimSpace(ret)
 	return ret
+}
+
+func AdjustBrackets(str string) string {
+	type Pair struct {
+		Front string
+		Back  string
+	}
+
+	pairs := []Pair{
+		{Front: "【", Back: "】"},
+		{Front: "「 ", Back: "」"},
+		{Front: "『 ", Back: "』"},
+		{Front: "（ ", Back: "）"},
+		{Front: "［ ", Back: "］"},
+	}
+	for _, p := range pairs {
+		fc := strings.Count(str, p.Front)
+		bc := strings.Count(str, p.Back)
+		if fc != bc {
+			//多い方を一つ削る
+			if fc > bc {
+				str = strings.Replace(str, p.Front, "", 1)
+			} else {
+				str = strings.Replace(str, p.Back, "", 1)
+			}
+		}
+	}
+	return str
 }
