@@ -42,6 +42,18 @@ func DelURL(body string) string {
 	return ret
 }
 
+func GetMention(body string) string {
+	r := regexp.MustCompile(`@(w*[一-龠_ぁ-ん_ァ-ヴーａ-ｚＡ-Ｚa-zA-Z0-9]+|[a-zA-Z0-9_]+|[a-zA-Z0-9_]w*)`)
+	l := r.FindAllStringSubmatch(body, -1)
+	mentions := []string{}
+	if l != nil {
+		for _, e := range l {
+			mentions = append(mentions, e[0])
+		}
+	}
+	return strings.Join(mentions, " ")
+}
+
 func AdjustBrackets(str string) string {
 	type Pair struct {
 		Front string
