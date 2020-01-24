@@ -1,8 +1,10 @@
 package html_replace
 
 import (
+	"math/rand"
 	"regexp"
 	"strings"
+	"time"
 )
 
 func GetOnlyTexts(list []string) []string {
@@ -62,10 +64,11 @@ func AdjustBrackets(str string) string {
 
 	pairs := []Pair{
 		{Front: "【", Back: "】"},
-		{Front: "「 ", Back: "」"},
-		{Front: "『 ", Back: "』"},
-		{Front: "（ ", Back: "）"},
-		{Front: "［ ", Back: "］"},
+		{Front: "「", Back: "」"},
+		{Front: "『", Back: "』"},
+		{Front: "（", Back: "）"},
+		{Front: "［", Back: "］"},
+		{Front: "＜", Back: "＞"},
 	}
 	for _, p := range pairs {
 		fc := strings.Count(str, p.Front)
@@ -80,4 +83,19 @@ func AdjustBrackets(str string) string {
 		}
 	}
 	return str
+}
+
+//ランダムに取得。同じ言葉を繰り返すと面白くなる
+func ChoiceRandom(words []string, limit int) []string {
+	if len(words) < limit {
+		limit = len(words)
+	}
+
+	ret := []string{}
+	for i := 0; i < limit; i++ {
+		rand.Seed(time.Now().UnixNano())
+		i := rand.Intn(len(words))
+		ret = append(ret, words[i])
+	}
+	return ret
 }
