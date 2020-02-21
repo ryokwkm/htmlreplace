@@ -44,6 +44,13 @@ func DelURL(body string) string {
 	return ret
 }
 
+func DelStrings(body string, dels []string) string {
+	for _, del := range dels {
+		body = strings.Replace(body, del, "", -1)
+	}
+	return body
+}
+
 func GetMention(body string) string {
 	r := regexp.MustCompile(`@(w*[一-龠_ぁ-ん_ァ-ヴーａ-ｚＡ-Ｚa-zA-Z0-9]+|[a-zA-Z0-9_]+|[a-zA-Z0-9_]w*)`)
 	l := r.FindAllStringSubmatch(body, -1)
@@ -67,6 +74,7 @@ func AdjustBrackets(str string) string {
 		{Front: "「", Back: "」"},
 		{Front: "『", Back: "』"},
 		{Front: "（", Back: "）"},
+		{Front: "（", Back: "）"},
 		{Front: "［", Back: "］"},
 		{Front: "＜", Back: "＞"},
 	}
@@ -74,12 +82,8 @@ func AdjustBrackets(str string) string {
 		fc := strings.Count(str, p.Front)
 		bc := strings.Count(str, p.Back)
 		if fc != bc {
-			//多い方を一つ削る
-			if fc > bc {
-				str = strings.Replace(str, p.Front, "", 1)
-			} else {
-				str = strings.Replace(str, p.Back, "", 1)
-			}
+			str = strings.Replace(str, p.Front, "", -1)
+			str = strings.Replace(str, p.Back, "", -1)
 		}
 	}
 	return str
