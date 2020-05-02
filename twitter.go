@@ -103,3 +103,14 @@ func ChoiceRandom(words []string, limit int) []string {
 	}
 	return ret
 }
+
+//本文にURLをつける
+func ConvertURL(tweetWord string, url string) string {
+	const TweetLimit = 125
+	//１０文字以上余白があるならつぶやく
+	if len([]rune(tweetWord)) > TweetLimit {
+		remainder := len([]rune(tweetWord)) - TweetLimit
+		tweetWord = string([]rune(tweetWord)[:remainder])
+	}
+	return tweetWord + url
+}
