@@ -86,6 +86,8 @@ func AdjustBrackets(str string) string {
 			str = strings.Replace(str, p.Back, "", -1)
 		}
 	}
+	//。を削除
+	str = strings.Replace(str, "。", "", -1)
 	return str
 }
 
